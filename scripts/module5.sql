@@ -1,0 +1,39 @@
+-- =============================================================================
+-- Module 5: Snowflake Intelligence
+-- Purpose: Explore Snowflake AI/ML capabilities via Cortex Playground
+-- =============================================================================
+--
+-- This module is UI-driven (no SQL to execute). Follow the instructions below.
+--
+-- RESOURCES:
+--   - Snowflake Intelligence Overview
+--   - Snowflake Cortex Agents
+--   - Snowflake Cortex Analyst
+--   - Snowflake Cortex Search
+--   - Understanding Snowflake Cortex
+--   - Tutorial: Getting Started with Snowflake Intelligence
+--
+-- STEPS:
+--
+-- 1. In Snowsight, navigate to the "AI/ML" section.
+--
+-- 2. Go to "Studio" to see the "Snowflake AI & ML Studio".
+--
+-- 3. Select "Try" next to Cortex Playground.
+--    NOTE: Cortex Playground does not directly support Dynamic Tables.
+--    To use Dynamic Tables with AI, you would need Cortex Search
+--    and a custom Agent (explore on your own if interested).
+--
+-- 4. Click "Connect your data".
+--
+-- 5. Select RAW_DB.PUBLIC.ORDERS as your Data Source, then click "Let's go".
+--
+-- 6. Select "PURCHASE" as the column, then click "Next".
+--
+-- 7. Select "CUSTID" as the filter column, then click "Done".
+--
+-- 8. Pick any CUSTID to scope the AI's access to that customer's orders.
+--
+-- 9. Ask the AI a question, e.g.: "What is this purchase about?"
+--
+-- =============================================================================

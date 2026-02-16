@@ -1,0 +1,15 @@
+-- =============================================================================
+-- Module 6: Snowflake Badge
+-- Purpose: Set up the Autograder and run autograding scripts for your badge
+-- =============================================================================
+--
+-- STEP 1: Setup Autograder
+--   Follow the instructions in the Autograder setup repo:
+--   https://mlh.link/snowflake-autograder
+--
+-- STEP 2: Run Autograding Scripts
+--   After setting up the Autograder, run the snowflake-intelligence.sql
+--   script step by step from:
+--   https://mlh.link/snowflake-autograding-scripts
+--
+-- =============================================================================

@@ -346,6 +346,55 @@ The grading script for this workshop is [`data-eng/ingestion-transformation-deli
 | `scripts/module4.sql` | `pipeline.sql` | Pipeline monitoring, freshness tuning, data quality enforcement |
 | `scripts/module5.sql` | *(UI-only)* | Snowflake Intelligence / Cortex Playground exploration |
 | `scripts/module6.sql` | `autograder-setup.sql` / `autograding.sql` | Autograder setup, identity registration, and badge grading |
+| `scripts/cleanup.sql` | `cleanup.sql` | Drops all workshop objects and resets the account |
+
+---
+
+## Cleanup: Reset Your Account
+
+**File:** `scripts/cleanup.sql`
+**Snowflake Workspace Name:** `cleanup.sql`
+
+### Purpose
+
+Remove all databases, tables, dynamic tables, functions, the warehouse, and the API integration created during the workshop, restoring your Snowflake account to its default state.
+
+### Prerequisites
+
+- You have already received your badge, **or** you no longer need the workshop objects
+- You are sure you want to permanently delete everything created in Modules 1–6
+
+### Steps
+
+1. In Snowsight, click **"+ Add new"** > **"SQL File"**. Name it `cleanup.sql`.
+2. Copy the contents of `scripts/cleanup.sql` into the file.
+3. Run each section **one at a time** (top to bottom) to confirm each drop succeeds.
+4. After running the final statement, you should see: **"Cleanup complete. All workshop objects have been removed."**
+
+### What Gets Removed
+
+| Object | Source Module |
+|--------|-------------|
+| Dynamic Table `fct_customer_orders_dt` | Modules 3 & 4 |
+| Dynamic Table `stg_orders_dt` | Module 2 |
+| Dynamic Table `stg_customers_dt` | Module 2 |
+| Table `customers` | Module 1 |
+| Table `products` | Module 1 |
+| Table `orders` | Module 1 |
+| Function `gen_cust_info` | Module 1 |
+| Function `gen_prod_inv` | Module 1 |
+| Function `gen_cust_purchase` | Module 1 |
+| External Function `grader` | Module 6 |
+| External Function `greeting` | Module 6 |
+| API Integration `dora_api_integration` | Module 6 |
+| Database `raw_db` | Module 1 |
+| Database `analytics_db` | Module 1 |
+| Database `util_db` | Module 6 |
+
+### Troubleshooting
+
+- **"Object does not exist" errors:** This is fine — `IF EXISTS` prevents failures. The object was likely already dropped or never created.
+- **"Insufficient privileges":** Make sure the first line (`use role accountadmin;`) ran successfully.
 
 ## Additional Information
 

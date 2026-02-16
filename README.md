@@ -22,7 +22,7 @@ Create your Snowflake trial account and set up the warehouse, databases, and sam
 
 ### Part A: Sign Up for a Snowflake Trial Account
 
-1. Visit [mlh.link/snowflake-de-trial](https://mlh.link/snowflake-de-trial).
+1. Visit the [Snowflake Student Trial Signup](https://signup.snowflake.com/?trial=student&cloud=aws&region=us-west-2&utm_source=build-meetups-2025&utm_campaign=build-meetups-2025).
 2. Fill out all the information and select **"Personal learning and development"**.
 3. On the next page, enter your personal details (company name and role can be fictional).
 4. Choose the **Standard** edition (it includes all AI/ML features at $2/credit so your trial credits stretch further, but any edition works).
@@ -244,27 +244,95 @@ Explore Snowflake's AI/ML capabilities using Cortex Playground to ask natural la
 
 ## Module 6: Snowflake Badge
 
-**File:** `scripts/module6.sql` (instructions only — no SQL to execute)
+**File:** `scripts/module6.sql`
+**Snowflake Workspace Names:** `autograder-setup.sql` and `autograding.sql`
 
 ### Purpose
 
-Earn your Snowflake workshop badge by setting up the Autograder and running the grading scripts.
+Earn your Snowflake workshop badge by setting up the Autograder, registering your identity, and running the grading scripts that verify your work from Modules 1–5.
 
-### Steps
+### Prerequisites
 
-1. Follow the Autograder setup instructions at: [mlh.link/snowflake-autograder](https://mlh.link/snowflake-autograder)
-2. After setup is complete, go to: [mlh.link/snowflake-autograding-scripts](https://mlh.link/snowflake-autograding-scripts)
-3. Open the `snowflake-intelligence.sql` script.
-4. Run the script **step by step** (not all at once) to complete the autograding process.
+- All previous modules (1–5) completed successfully
+- The same Snowflake account you used throughout the workshop
+- The email address you registered for the event with
+
+### Part A: Set Up the Autograder
+
+1. In Snowsight, click **"+ Add new"** > **"SQL File"**. Name it `autograder-setup.sql`.
+2. Copy the autograder setup SQL from `scripts/module6.sql` (the section between the `BEGIN` and `END` markers), or copy it directly from the [Snowflake Builder Workshops repo](https://github.com/Snowflake-Labs/builder-workshops).
+3. Click **"Run All"** to execute the setup script.
+4. You should see a result row containing the message: **"The Snowflake auto-grader has been successfully set up in your account!"**
+5. If you see this success message, the autograder is ready. If not, check that you are using the **ACCOUNTADMIN** role.
+
+### Part B: Register Your Name and Email
+
+6. In the same worksheet, scroll down to the `greeting` function call.
+7. Replace the placeholders with your actual information:
+
+   ```sql
+   select util_db.public.greeting('your-email@example.com', 'First', '', 'Last');
+   ```
+
+8. **Important — read before running:**
+   - Use the **same email** you registered for the event with. If you use a different email, your badge will not be issued. Contact `developer-badges-DL@snowflake.com` for email issues.
+   - **Do not** use all capital letters (e.g., `'JOHN'`).
+   - **Do not** use all lowercase letters (e.g., `'john'`).
+   - **Do not** use CamelCase (e.g., `'JohnDoe'`). Use spaces between words.
+   - You **must** include both a first name and a last name.
+   - If you have no middle name, use an empty string: `''`.
+   - Do **not** use the word `null` for any value.
+   - If your name is a single character, add a trailing space (e.g., `'A '`).
+   - Accented characters and non-English letters are supported.
+
+9. Run the `greeting` line. You should see a confirmation response.
+
+### Part C: Run the Autograding Scripts
+
+The grading script for this workshop is [`data-eng/ingestion-transformation-delivery.sql`](https://github.com/Snowflake-Labs/builder-workshops/blob/main/data-eng/ingestion-transformation-delivery.sql) from the Snowflake Builder Workshops repo. It is also included in `scripts/module6.sql` for convenience.
+
+10. Open a **new** SQL Worksheet in Snowsight. Name it `autograding.sql`.
+11. Copy the autograding SQL from `scripts/module6.sql` (the section between the second `BEGIN` and `END` markers), or copy it directly from the [GitHub source](https://github.com/Snowflake-Labs/builder-workshops/blob/main/data-eng/ingestion-transformation-delivery.sql).
+12. Run each statement **one at a time** (do **not** use "Run All"). Each `grader()` call checks a specific part of your workshop and returns a pass/fail result.
+13. The grading script verifies the following:
+
+    | Test | What It Checks |
+    |------|---------------|
+    | BWITD01 | `TASTY_BYTES` database exists |
+    | BWITD02 | `country` table has 30 rows |
+    | BWITD03 | `WINDSPEED_HAMBURG` view exists in `HARMONIZED` schema |
+    | BWITD04 | `fahrenheit_to_celsius` and `inch_to_millimeter` UDFs exist in `ANALYTICS` schema |
+    | BWITD05 | `WEATHER_HAMBURG` view exists in `HARMONIZED` schema |
+    | BWITD06 | `HAMBURG_GERMANY_TRENDS` Streamlit app exists in `HARMONIZED` schema |
+
+14. If a statement fails, go back to the corresponding module, fix the issue, and re-run the grading statement.
+15. After all statements pass, you should see: **"Congratulations! You have successfully completed the Snowflake Northstar - Data Engineering workshop!"**
 
 ### Expected Results
 
-- The autograder validates your workshop setup and awards you a badge upon successful completion.
+- Autograder setup returns a success confirmation
+- Greeting function returns a confirmation with your registered details
+- All 6 grading statements (BWITD01–BWITD06) return passing results
+- Final output confirms workshop completion
+- You will receive your digital badge via email (allow up to **7 business days**)
 
 ### Troubleshooting
 
-- **Autograder setup fails:** Double-check that all previous modules (1–5) have been completed successfully before running the grading scripts.
-- **Grading script errors:** Run each statement one at a time to identify which step fails. Ensure the required tables and Dynamic Tables exist in the correct databases.
+- **"Run All" fails on setup:** Ensure you are using the `ACCOUNTADMIN` role. The first line of the script should be `use role accountadmin;`.
+- **Greeting function returns an error:** Double-check your name formatting against the guidelines above. Common mistakes include using all lowercase or forgetting to put spaces between words.
+- **Badge not received:** Verify you used the same email as your event registration. If you need to change your email, contact `developer-badges-DL@snowflake.com`.
+- **BWITD01 fails:** The `TASTY_BYTES` database doesn't exist. Make sure you completed the workshop's data setup steps.
+- **BWITD02 fails:** The `country` table is missing or has the wrong row count. Re-run the data load step.
+- **BWITD03 or BWITD05 fails:** The required view (`WINDSPEED_HAMBURG` or `WEATHER_HAMBURG`) doesn't exist in `TASTY_BYTES.HARMONIZED`. Create the missing view.
+- **BWITD04 fails:** One or both UDFs (`FAHRENHEIT_TO_CELSIUS`, `INCH_TO_MILLIMETER`) are missing from `TASTY_BYTES.ANALYTICS`. Create the missing functions.
+- **BWITD06 fails:** The `HAMBURG_GERMANY_TRENDS` Streamlit app doesn't exist. Create and run the Streamlit app in the `TASTY_BYTES.HARMONIZED` schema.
+- **API integration errors:** Make sure your Snowflake region is set to **AWS US West (Oregon)** — the grading API endpoint is hosted there.
+
+### Additional Information
+
+- The autograder works by creating an external function that calls Snowflake's grading API. Each `grader()` call sends your account info and the test result to the service.
+- The `greeting()` function registers your name and email so the badge can be issued to the correct person.
+- The grading script source is: [Snowflake-Labs/builder-workshops — data-eng/ingestion-transformation-delivery.sql](https://github.com/Snowflake-Labs/builder-workshops/blob/main/data-eng/ingestion-transformation-delivery.sql)
 
 ---
 
@@ -277,7 +345,7 @@ Earn your Snowflake workshop badge by setting up the Autograder and running the 
 | `scripts/module3.sql` | `chaining-dt.sql` | Fact Dynamic Table joining upstream staging tables |
 | `scripts/module4.sql` | `pipeline.sql` | Pipeline monitoring, freshness tuning, data quality enforcement |
 | `scripts/module5.sql` | *(UI-only)* | Snowflake Intelligence / Cortex Playground exploration |
-| `scripts/module6.sql` | *(UI-only)* | Autograder setup and badge grading |
+| `scripts/module6.sql` | `autograder-setup.sql` / `autograding.sql` | Autograder setup, identity registration, and badge grading |
 
 ## Additional Information
 

@@ -116,59 +116,60 @@ select util_db.public.greeting('YOUR_EMAIL', 'YOUR_FIRST_NAME', 'YOUR_MIDDLE_NAM
 
 -- ===== BEGIN: Autograding Script (Data Engineering) =====
 
-USE ROLE accountadmin;
-USE WAREHOUSE compute_wh;
-USE DATABASE tasty_bytes;
+use role accountadmin;
+use database util_db;
+use schema public;
 
--- Test 1: TASTY_BYTES database exists
 select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
- 'BWITD01' as step
- ,(SELECT COUNT(*) FROM INFORMATION_SCHEMA.DATABASES WHERE DATABASE_NAME = 'TASTY_BYTES') as actual
- , 1 as expected
- ,'TASTY_BYTES database successfully created!' as description
-);
-
--- Test 2: Country table loaded with 30 rows
-select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
- 'BWITD02' as step
- ,(SELECT COUNT(*) FROM tasty_bytes.raw_pos.country) as actual
- , 30 as expected
- ,'Data successfully copied into the country table!' as description
-);
-
--- Test 3: WINDSPEED_HAMBURG view exists
-select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
- 'BWITD03' as step
- ,(SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'WINDSPEED_HAMBURG' AND TABLE_SCHEMA = 'HARMONIZED' AND TABLE_CATALOG = 'TASTY_BYTES') as actual
- , 1 as expected
- ,'WINDSPEED_HAMBURG view successfully created and contains correct data!' as description
-);
-
--- Test 4: fahrenheit_to_celsius and inch_to_millimeter UDFs exist
-select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
- 'BWITD04' as step
- ,(SELECT COUNT(*) FROM INFORMATION_SCHEMA.FUNCTIONS WHERE FUNCTION_NAME IN ('FAHRENHEIT_TO_CELSIUS', 'INCH_TO_MILLIMETER') AND FUNCTION_SCHEMA = 'ANALYTICS' AND FUNCTION_CATALOG = 'TASTY_BYTES') as actual
+ 'BWDT01' as step
+ , (select count(*) from snowflake.information_schema.databases 
+   where database_name in ('RAW_DB', 'ANALYTICS_DB')) as actual
  , 2 as expected
- ,'fahrenheit_to_celsius and inch_to_millimeter UDFs successfully created!' as description
+ ,'All databases was created successfully!' as description
 );
 
--- Test 5: WEATHER_HAMBURG view exists
 select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
- 'BWITD05' as step
- ,(SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'WEATHER_HAMBURG' AND TABLE_SCHEMA = 'HARMONIZED' AND TABLE_CATALOG = 'TASTY_BYTES') as actual
- , 1 as expected
- ,'WEATHER_HAMBURG view successfully created and contains correct data!' as description
+ 'BWDT02' as step
+ , (select count(*) from raw_db.information_schema.functions where function_name in ('GEN_CUST_INFO', 'GEN_PROD_INV', 'GEN_CUST_PURCHASE')) as actual
+ , 3 as expected
+ ,'Created 3 Python UDTF successfully!' as description
 );
 
--- Test 6: HAMBURG_GERMANY_TRENDS Streamlit app exists
 select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
- 'BWITD06' as step
- ,(SELECT COUNT(*) FROM INFORMATION_SCHEMA.STREAMLITS WHERE STREAMLIT_TITLE = 'HAMBURG_GERMANY_TRENDS' AND STREAMLIT_CATALOG = 'TASTY_BYTES' AND STREAMLIT_SCHEMA = 'HARMONIZED') as actual
- , 1 as expected
- ,'HAMBURG_GERMANY_TRENDS Streamlit app created and run successfully!' as description
+ 'BWDT03' as step
+ , (select count(*) from raw_db.information_schema.tables where table_name in ('CUSTOMERS', 'PRODUCTS', 'ORDERS')) as actual
+ , 3 as expected
+ ,'All tables were created successfully with data!' as description
 );
 
--- Final confirmation
-SELECT 'Congratulations! You have successfully completed the Snowflake Northstar - Data Engineering workshop!' as STATUS;
+select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
+ 'BWDT04' as step
+ , (select count(*) from analytics_db.information_schema.tables where table_name = 'STG_CUSTOMERS_DT') as actual
+ , 1 as expected
+ ,'First Dynamic Table were created successfully!' as description
+);
+
+select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
+ 'BWDT05' as step
+ , (select count(*) from analytics_db.information_schema.tables where table_name = 'STG_ORDERS_DT') as actual
+ , 1 as expected
+ ,'Second Dynamic Table were created successfully!' as description
+);
+
+select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
+ 'BWDT06' as step
+ , (select count(*) from analytics_db.information_schema.tables where table_name = 'FCT_CUSTOMER_ORDERS_DT') as actual
+ , 1 as expected
+ ,'Fact Dynamic Table were created successfully!' as description
+);
+
+select util_db.public.grader(step, (actual = expected), actual, expected, description) as graded_results from (SELECT
+ 'BWDT07' as step
+ , (select count(*) from analytics_db.public.fct_customer_orders_dt where product_id is null) as actual
+ , 0 as expected
+ ,'Data quality was integrated successfully!' as description
+);
+
+SELECT 'You\'ve successfully completed Build 2025\'s DE lab!' as STATUS;
 
 -- ===== END: Autograding Script (Data Engineering) =====
